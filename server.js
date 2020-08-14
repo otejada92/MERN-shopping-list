@@ -1,24 +1,28 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import bodyParse from 'body-parser';
 import items from './routers/api/items.js';
+import users from './routers/api/user.js';
+import auth from './routers/api/auth.js';
 import cors from 'cors';
 import path from 'path';
-
-import { mongoURI as db } from './config/key.js';
+import config from './config/index.js';
 
 const app = express();
 
-app.use(bodyParse.json());
+app.use(cors());
 
-app.use(cors())
+app.use(express.json());
 
-mongoose.connect(db, {useNewUrlParser: true, useUnifiedTopology: true})
+const { MONGO_URI, MONGO_DB_NAME } = config;
+const mongoURI = `${MONGO_URI}/${MONGO_DB_NAME}`
+
+mongoose.connect(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
     .then(() => console.log("Connected to mongo"))
     .catch(err => console.log(err));
 
-
 app.use('/api/items/', items);
+app.use('/api/users/', users);
+app.use('/api/auth/', auth);
 
 const port = process.env.PORT || 5000
 
