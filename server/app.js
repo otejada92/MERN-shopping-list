@@ -24,8 +24,6 @@ app.use('/api/items/', items);
 app.use('/api/users/', users);
 app.use('/api/auth/', auth);
 
-const port = process.env.PORT || 5000
-
 if(process.env.NODE_ENV === 'production'){
     
     app.use(express.static('client/build'));
@@ -35,6 +33,5 @@ if(process.env.NODE_ENV === 'production'){
     });
 }
 
-app.listen(port, ()=>{
-    console.log(`listening to port ${port}`);
-});
+
+export default app;
